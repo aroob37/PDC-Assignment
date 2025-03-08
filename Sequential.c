@@ -44,7 +44,7 @@ void sieve_of_eratosthenes(int n) {
 }
 
 int main() {
-    int n = 1000; 
+    int n = 10000000; 
     clock_t start = clock();
     sieve_of_eratosthenes(n);
     clock_t end = clock();

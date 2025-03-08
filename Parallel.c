@@ -16,7 +16,7 @@ void sieve_of_eratosthenes_parallel(int n) {
 
     for (int p = 2; p * p <= n; p++) {
         if (is_prime[p]) {
-            #pragma omp parallel for schedule(static)
+            #pragma omp parallel for schedule(dynamic, 1000)
             for (int i = p * p; i <= n; i += p) {
                 is_prime[i] = false;
             }
@@ -36,7 +36,8 @@ void sieve_of_eratosthenes_parallel(int n) {
 }
 
 int main() {
-    int n = 1000;
+    int n = 10000000;
+    omp_set_num_threads(8);
     double start = omp_get_wtime();
     sieve_of_eratosthenes_parallel(n);
     double end = omp_get_wtime();
