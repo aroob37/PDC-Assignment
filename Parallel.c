@@ -6,8 +6,13 @@
 #include <time.h>
 #include <omp.h>
 
-void sieve_of_eratosthenes_parallel(int n) {
+void sieve_of_eratosthenes_parallel(int n,  int num_threads) {
     bool *is_prime = (bool *)malloc((n + 1) * sizeof(bool));
+
+    double start, end;
+    omp_set_num_threads(num_threads);
+    start = omp_get_wtime();
+
     #pragma omp parallel for
     for (int i = 0; i <= n; i++) {
         is_prime[i] = true;
@@ -40,16 +45,17 @@ void sieve_of_eratosthenes_parallel(int n) {
         }
     }
 
-    printf("Number of primes up to %d: %d\n", n, count);
+    end = omp_get_wtime();
+    printf("Threads: %d \nNumber of primes up to %d: %d \nTime: %.6f sec\n\n", num_threads, n, count, end - start);
     free(is_prime);
 }
 
 int main() {
-    int n = 10000000;
-    omp_set_num_threads(8);
-    double start = omp_get_wtime();
-    sieve_of_eratosthenes_parallel(n);
-    double end = omp_get_wtime();
-    printf("Parallel execution time: %f seconds\n", end - start);
+    int n = 100000000;  
+    int thread_counts[] = {1, 4, 8}; 
+
+    for (int i = 0; i < 3; i++) {
+        sieve_of_eratosthenes_parallel(n, thread_counts[i]);
+    }
     return 0;
 }
