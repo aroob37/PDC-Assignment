@@ -7,7 +7,7 @@
 #include <omp.h>
 
 void sieve_of_eratosthenes_parallel(int n,  int num_threads) {
-    bool *is_prime = (bool *)malloc((n + 1) * sizeof(bool));
+    char *is_prime = (char *)malloc((n + 1) * sizeof(char));
 
     double start, end;
     omp_set_num_threads(num_threads);
@@ -38,7 +38,7 @@ void sieve_of_eratosthenes_parallel(int n,  int num_threads) {
     /*reduction clause eliminates race conditions by creating a private copy of the variable for each thread.
      Each thread works on its private copy, and at the end of the parallel region.
      The results from all threads are combined and reduced into a single value.*/
-    #pragma omp parallel for reduction(+:count)  schedule(static) 
+    #pragma omp parallel for reduction(+:count) schedule(static)
     for (int p = 2; p <= n; p++) {
         if (is_prime[p]) {
             count++;
